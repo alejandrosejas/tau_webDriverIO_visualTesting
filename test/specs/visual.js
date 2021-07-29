@@ -13,7 +13,7 @@ describe('Applitools Visual Test', function () {
     it('Page should look ok', async function () {
 
         // Navigate the browser to the "hello world example" web-site.
-        browser.url('https://applitools.com/helloworld?diff2')
+        browser.url('https://applitools.com/helloworld')
 
         try {
 
