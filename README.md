@@ -13,4 +13,3 @@ npm i @applitools/eyes.webdriverio
 # To Run
 
 npm run test 'location of file' eg 'npm run test ./test/specs/visual.js'
-check
