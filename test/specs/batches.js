@@ -1,73 +1,73 @@
 // Initialize the eyes SDK
-const { Eyes, Target } = require('@applitools/eyes.webdriverio')
+const { Eyes, Target } = require("@applitools/eyes.webdriverio");
 
-const eyes = new Eyes()
+const eyes = new Eyes();
 
 // Set your private API key.
-eyes.setApiKey(process.env.APPLITOOLS_API_KEY)
+eyes.setApiKey(process.env.APPLITOOLS_API_KEY);
 
 // Allows you to gather your tests into separate groupings within the same file
-describe('Batches', function () {
+describe("Batches", function () {
+  // represents a single test case
+  it("Page should look ok", async function () {
+    // Navigate the browser to the "hello world example" web-site.
+    browser.url("http://the-internet.herokuapp.com/tables");
 
-    // represents a single test case
-    it('Page should look ok', async function () {
+    try {
+      // Set browser to fullscreen
+      browser.windowHandleFullscreen();
 
-        // Navigate the browser to the "hello world example" web-site.
-        browser.url('http://the-internet.herokuapp.com/tables')
+      // Get the current size of the screen
+      const viewportSize = browser.getViewportSize();
 
-        try {
+      // Set Batch Name and ID
+      eyes.setBatch("Batch Example", "First Batch");
 
-            // Set browser to fullscreen
-            browser.windowHandleFullscreen();
+      // Start the test and set the browser's viewport size to
+      await eyes.open(
+        browser,
+        "Test Batches",
+        "Last Name filter",
+        viewportSize
+      );
 
-            // Get the current size of the screen
-            const viewportSize = browser.getViewportSize()
+      browser.click("#table1 > thead > tr > th:nth-child(1) > span");
 
-            // Set Batch Name and ID
-            eyes.setBatch("Batch Example", "First Batch");
+      // Visual checkpoint #1.
+      await eyes.check("Check Last Name", Target.window());
 
-            // Start the test and set the browser's viewport size to 
-            await eyes.open(browser, 'Test Batches', 'Last Name filter', viewportSize);
+      // End the test.
+      await eyes.close();
 
-            browser.click('#table1 > thead > tr > th:nth-child(1) > span')
+      // Start the test and set the browser's viewport size to
+      await eyes.open(
+        browser,
+        "Test Batches",
+        "First Name filter",
+        viewportSize
+      );
 
-            // Visual checkpoint #1.
-            await eyes.check('Check Last Name', Target.window());
+      browser.click("#table1 > thead > tr > th:nth-child(2) > span");
 
-            // End the test.
-            await eyes.close();
+      // Visual checkpoint #1.
+      await eyes.check("Check First Name", Target.window());
 
+      // End the test.
+      await eyes.close();
 
-            // Start the test and set the browser's viewport size to 
-            await eyes.open(browser, 'Test Batches', 'First Name filter', viewportSize);
+      // Start the test and set the browser's viewport size to
+      await eyes.open(browser, "Test Batches", "Due filter", viewportSize);
 
-            browser.click('#table1 > thead > tr > th:nth-child(2) > span')
+      browser.click("#table1 > thead > tr > th:nth-child(4) > span");
 
-            // Visual checkpoint #1.
-            await eyes.check('Check First Name', Target.window());
+      // Visual checkpoint #1.
+      await eyes.check("Check Amount Due", Target.window());
 
-            // End the test.
-            await eyes.close();
-
-
-
-            // Start the test and set the browser's viewport size to 
-            await eyes.open(browser, 'Test Batches', 'Due filter', viewportSize);
-
-            browser.click('#table1 > thead > tr > th:nth-child(4) > span')
-
-            // Visual checkpoint #1.
-            await eyes.check('Check Amount Due', Target.window());
-
-            // End the test.
-            await eyes.close();
-
-        } finally {
-
-            // If the test was aborted before eyes.close was called ends the test as aborted.
-            await eyes.abortIfNotClosed();
-
-        }
-    })
-})
-
+      // End the test.
+      await eyes.close();
+    } finally {
+      // If the test was aborted before eyes.close was called ends the test as aborted.
+      await eyes.abortIfNotClosed();
+    }
+  });
+});

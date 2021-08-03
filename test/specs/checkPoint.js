@@ -1,100 +1,101 @@
 // Initialize the eyes SDK
-const { Eyes, Target } = require('@applitools/eyes.webdriverio')
+const { Eyes, Target } = require("@applitools/eyes.webdriverio");
 
-const eyes = new Eyes()
+const eyes = new Eyes();
 
 // set your private API key.
-eyes.setApiKey(process.env.APPLITOOLS_API_KEY)
+eyes.setApiKey(process.env.APPLITOOLS_API_KEY);
 
-describe('Check Points Example', function () {
+describe("Check Points Example", function () {
+  it("Full Page Screenshot", async function () {
+    // command to take full page screen shot
+    eyes.setForceFullPageScreenshot(true);
 
-    it('Full Page Screenshot', async function () {
- 
-        // command to take full page screen shot
-        eyes.setForceFullPageScreenshot(true); 
+    // Navigate to the required url
+    browser.url("https://www.wikipedia.org/");
 
-        // Navigate to the required url
-        browser.url('https://www.wikipedia.org/')
-        
-        try {
+    try {
+      // Set chrome to fullscreen
+      browser.windowHandleFullscreen();
 
-            // Set chrome to fullscreen
-            browser.windowHandleFullscreen();
+      // Get the current size of the screen
+      const viewportSize = browser.getViewportSize();
 
-            // Get the current size of the screen
-            const viewportSize = browser.getViewportSize()
+      // Start the test and set the browser's viewport size to
+      await eyes.open(
+        browser,
+        "Full Page Screen Shot",
+        "Full Page Test Example",
+        viewportSize
+      );
 
-            // Start the test and set the browser's viewport size to 
-            await eyes.open(browser, 'Full Page Screen Shot', 'Full Page Test Example', viewportSize);
+      // Visual checkpoint #1.
+      await eyes.check("Main Page", Target.window());
 
-            // Visual checkpoint #1.
-            await eyes.check('Main Page', Target.window());
+      // End the test.
+      await eyes.close();
+    } finally {
+      // If the test was aborted before eyes.close was called ends the test as aborted.
+      await eyes.abortIfNotClosed();
+    }
+  });
 
-            // End the test.
-            await eyes.close();
+  it("Check Element By Selector", async function () {
+    // Navigate the browser to the "hello world!" web-site.
+    browser.url("https://www.wikipedia.org/");
 
-        } finally {
+    try {
+      // Set chrome to fullscreen
+      browser.windowHandleFullscreen();
 
-            // If the test was aborted before eyes.close was called ends the test as aborted.
-            await eyes.abortIfNotClosed();
-        }
-    })
+      // Get the current size of the screen
+      const viewportSize = browser.getViewportSize();
 
-    it('Check Element By Selector', async function () {
-        // Navigate the browser to the "hello world!" web-site.
-        browser.url('https://www.wikipedia.org/')
-        
-        try {
+      // Start the test and set the browser's viewport size to
+      await eyes.open(
+        browser,
+        "Check Element By Selector Example",
+        "Wiki Selector Example",
+        viewportSize
+      );
 
-            // Set chrome to fullscreen
-            browser.windowHandleFullscreen();
+      // Visual checkpoint #1.
+      await eyes.checkElementBySelector("#www-wikipedia-org > h1 > div > div");
 
-            // Get the current size of the screen
-            const viewportSize = browser.getViewportSize()
+      // End the test.
+      await eyes.close();
+    } finally {
+      // If the test was aborted before eyes.close was called ends the test as aborted.
+      await eyes.abortIfNotClosed();
+    }
+  });
 
-            // Start the test and set the browser's viewport size to 
-            await eyes.open(browser, 'Check Element By Selector Example', 'Wiki Selector Example', viewportSize);
+  it.only("Check Frame", async function () {
+    browser.url("http://the-internet.herokuapp.com/nested_frames");
 
-            // Visual checkpoint #1.
-            await eyes.checkElementBySelector('#www-wikipedia-org > h1 > div > div');
+    try {
+      // Set chrome to fullscreen
+      browser.windowHandleFullscreen();
 
-            // End the test.
-            await eyes.close();
+      // Get the current size of the screen
+      const viewportSize = browser.getViewportSize();
 
-        } finally {
+      // Start the test and set the browser's viewport size to
+      await eyes.open(
+        browser,
+        "Check Frame Example",
+        "Check Bottom Frame Example",
+        viewportSize
+      );
 
-            // If the test was aborted before eyes.close was called ends the test as aborted.
-            await eyes.abortIfNotClosed();
-        }
-    })
+      // Visual checkpoint #1.
+      await eyes.checkFrame("frame-bottom");
 
-    it.only('Check Frame', async function () {
-
-        browser.url('http://the-internet.herokuapp.com/nested_frames')
-        
-        try {
-
-            // Set chrome to fullscreen
-            browser.windowHandleFullscreen();
-
-            // Get the current size of the screen
-            const viewportSize = browser.getViewportSize()
-
-            // Start the test and set the browser's viewport size to 
-            await eyes.open(browser, 'Check Frame Example', 'Check Bottom Frame Example', viewportSize);
-
-            // Visual checkpoint #1.
-            await eyes.checkFrame('frame-bottom');
-
-            // End the test.
-            await eyes.close();
-
-        } finally {
-
-            // If the test was aborted before eyes.close was called ends the test as aborted.
-            await eyes.abortIfNotClosed();
-        }
-    })
-    
-
-})
+      // End the test.
+      await eyes.close();
+    } finally {
+      // If the test was aborted before eyes.close was called ends the test as aborted.
+      await eyes.abortIfNotClosed();
+    }
+  });
+});
